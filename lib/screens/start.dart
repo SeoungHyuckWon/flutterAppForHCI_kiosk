@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'home.dart';
 
 class MyStartPage extends StatelessWidget {
   final String title;
@@ -19,7 +21,8 @@ class MyStartPage extends StatelessWidget {
             height: 300,
             child: RaisedButton(
                 onPressed: () {
-                  print("click");
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (context) => MyHomePage()));
                 },
                 color: Colors.lightBlue,
                 child: Text(
@@ -35,7 +38,8 @@ class MyStartPage extends StatelessWidget {
             height: 300,
             child: RaisedButton(
                 onPressed: () {
-                  print("click");
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (context) => MyHomePage()));
                 },
                 color: Colors.lightBlue,
                 child: Text(
@@ -50,5 +54,3 @@ class MyStartPage extends StatelessWidget {
     ));
   }
 }
-
-class SizeBox {}
