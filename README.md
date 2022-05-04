@@ -1,16 +1,12 @@
-# flutter_application_kiosk
+# HCI 프로젝트 : 디지털취약계층 키오스크 UI 만들기
+# 팀원 : 황인권 원성혁 윤병욱
 
-A new Flutter project.
+flutter project for HCI
 
-## Getting Started
+## 역할분배
 
-This project is a starting point for a Flutter application.
+원성혁: start 화면, home 화면
+윤병욱: detail 화면
+황인권: final 화면
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+예정: firebase 연동, nevigation 탑제로 화면전환
