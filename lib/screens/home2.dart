@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyHomePage2 extends StatefulWidget {
+  const MyHomePage2({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage2> createState() => _MyHomePageState2();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState2 extends State<MyHomePage2> {
   @override
   List<String> coffeeImg = [
     "coffee_img/01.png",
@@ -54,8 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 7.5 / 10,
+                    crossAxisCount: 3,
+                    childAspectRatio: 7 / 10,
                     //mainAxisExtent: 200,
                     crossAxisSpacing: 10,
                   ),
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Icon(Icons.thumb_up),
                               Padding(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 50)),
+                                      vertical: 0, horizontal: 15)),
                               IconButton(
                                   onPressed: () {}, icon: Icon(Icons.search))
                             ]),
