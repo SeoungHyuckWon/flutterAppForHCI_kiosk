@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_kiosk/screens/final.dart';
 import 'screens/start.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.lightBlue, primaryColor: Colors.white),
       // ignore: prefer_const_constructors
-      home: MyStartPage(title: 'Flutter Demo Home Page'),
+      home: MyFinalPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
