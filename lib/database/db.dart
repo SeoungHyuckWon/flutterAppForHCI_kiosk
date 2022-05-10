@@ -157,8 +157,8 @@ class DBHelperMenu {
 //       return MyOrder(
 //         name: maps[i]['name'],
 //         price: maps[i]['price'],
-//         syrup: maps[i]['syrup'],
-//         count: maps[i]['count']
+//         count: maps[i]['count'],
+//         id: maps[i]['id']
 //       );
 //     });
 //   }
@@ -184,9 +184,9 @@ class DBHelperMenu {
 //     await db.delete(
 //       TableNameV2,
 //       // 특정 memo를 제거하기 위해 `where` 절을 사용하세요
-//       where: "id = ?",
+//       where: "name = ?",
 //       // Memo의 id를 where의 인자로 넘겨 SQL injection을 방지합니다.
-//       whereArgs: [id],
+//       whereArgs: [name],
 //     );
 //   }
 
@@ -194,16 +194,15 @@ class DBHelperMenu {
 //     final db = await database;
 //     final List<Map<String, dynamic>> maps = await db.query(
 //       'menus',
-//       where: 'id = ?',
-//       whereArgs: [id],
+//       where: 'name = ?',
+//       whereArgs: [name],
 //     );
 //     return List.generate(maps.length, (i) {
 //       return Menu(
-//         id: maps[i]['id'],
 //         name: maps[i]['name'],
 //         price: maps[i]['price'],
-//         mainAllergy: maps[i]['mainAllergy'],
-//         subAllergy: maps[i]['subAllergy'],
+//         count: maps[i]['count'],
+//         id: maps[i]['id']
 //       );
 //     });
 //   }
