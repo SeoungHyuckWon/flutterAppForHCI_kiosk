@@ -5,17 +5,15 @@ import 'package:flutter_application_kiosk/database/menu.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_application_kiosk/screens/detail.dart';
-//import 'package:firebase_core/firebase_core.dart';
-//import 'firebase_options.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyHomePage2 extends StatefulWidget {
+  const MyHomePage2({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage2> createState() => _MyHomePageState2();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState2 extends State<MyHomePage2> {
   @override
   List<String> coffeeImg = [
     "assets/coffee_img/01.png",
@@ -31,8 +29,6 @@ class _MyHomePageState extends State<MyHomePage> {
     "assets/coffee_img/11.png",
     "assets/coffee_img/12.png"
   ];
-
-  //late Menu menu;
   late BuildContext _context;
   String id = '';
   Widget build(BuildContext context) {
@@ -54,8 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
             labels: ['주스', '커피'],
             onToggle: (index) {
               print('switched to: $index');
-              //saveDB();
-              //deleteMenu('C5');
             },
           ),
         ]),
@@ -67,9 +61,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   shrinkWrap: true,
                   physics: BouncingScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 7.5 / 10,
-                    //mainAxisExtent: 300,
+                    crossAxisCount: 3,
+                    childAspectRatio: 7 / 10,
+                    //mainAxisExtent: 200,
                     crossAxisSpacing: 10,
                   ),
                   itemBuilder: (BuildContext context, int index) {
@@ -82,17 +76,15 @@ class _MyHomePageState extends State<MyHomePage> {
                               Icon(Icons.thumb_up),
                               Padding(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 50)),
+                                      vertical: 0, horizontal: 15)),
                               IconButton(
                                   onPressed: () {
                                     showAlertDialog(
                                         'C' + (index + 1).toString());
-                                    //print('C' + (index + 1).toString());
                                   },
                                   icon: Icon(Icons.search))
                             ]),
                             //fit: BoxFit.fitWidth),
-                            //Image(image: AssetImage(coffeeImg[index]))
                             InkWell(
                                 onTap: () {
                                   Navigator.push(
@@ -114,27 +106,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<void> saveDB() async {
-    DBHelperMenu sd = DBHelperMenu();
-
-    var fido = Menu(
-        id: 'C12',
-        name: '플랫화이트',
-        price: 3000,
-        mainAllergy: '카페인',
-        subAllergy: '커피추출액,우유',
-        rankScore: 0);
-
-    await sd.insertMenu(fido);
-
-    print(await sd.menus());
-  }
-
-  Future<void> deleteMenu(String id) async {
-    DBHelperMenu sd = DBHelperMenu();
-    sd.deleteMenu(id);
-  }
-
   Future<List<Menu>> loadMenu(String id) async {
     DBHelperMenu sd = DBHelperMenu();
     return await sd.findMenu(id);
@@ -152,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return SingleChildScrollView(
             child: ListBody(children: [
               Text(
-                "알레르기 주의 성분: " + menu.mainAllergy + '\n',
+                menu.mainAllergy,
                 style: TextStyle(color: Colors.red),
               ),
               Text(menu.subAllergy)
