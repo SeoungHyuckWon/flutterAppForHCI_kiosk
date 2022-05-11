@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_kiosk/screens/start.dart';
 
 class MyFinalPage extends StatefulWidget {
-  const MyFinalPage({ Key? key, required String title }) : super(key: key);
+  const MyFinalPage({ Key? key, required String id }) : super(key: key);
+
 
   @override
   State<MyFinalPage> createState() => _MyFinalPageState();
