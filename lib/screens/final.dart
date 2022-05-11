@@ -62,7 +62,9 @@ class _MyFinalPageState extends State<MyFinalPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15.0),
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 7, horizontal: 0)),
+                //SizedBox(height: 15.0),
                 SizedBox(
                   width: 300,
                   height: 60,

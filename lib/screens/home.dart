@@ -99,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (context) => MyDetailPage(
-                                                id: 'C' + index.toString(),
+                                                id: 'C' +
+                                                    (index + 1).toString(),
                                               )));
                                 },
                                 child: Image(
