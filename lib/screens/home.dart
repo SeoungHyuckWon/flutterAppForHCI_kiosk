@@ -44,10 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ToggleSwitch(
             minWidth: 180.0,
             minHeight: 60.0,
-            fontSize: 16.0,
+            fontSize: 25.0,
             initialLabelIndex: 1,
-            activeBgColor: [Colors.lightBlue],
-            activeFgColor: Colors.white,
+            activeBgColor: [Color.fromARGB(255, 139, 253, 131)],
+            activeFgColor: Colors.black,
             inactiveBgColor: Colors.grey,
             inactiveFgColor: Colors.grey[900],
             totalSwitches: 2,
@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onToggle: (index) {
               print('switched to: $index');
               //saveDB();
-              //deleteMenu('C5');
+              //deleteMenu('C7');
             },
           ),
         ]),
@@ -118,11 +118,11 @@ class _MyHomePageState extends State<MyHomePage> {
     DBHelperMenu sd = DBHelperMenu();
 
     var fido = Menu(
-        id: 'C12',
-        name: '플랫화이트',
-        price: 3000,
+        id: 'C7',
+        name: '바닐라라떼',
+        price: 4000,
         mainAllergy: '카페인',
-        subAllergy: '커피추출액,우유',
+        subAllergy: '커피추출액,바닐라라떼,우유',
         rankScore: 0);
 
     await sd.insertMenu(fido);
