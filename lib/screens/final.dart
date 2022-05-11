@@ -3,10 +3,14 @@ import 'package:flutter_application_kiosk/screens/start.dart';
 
 class MyFinalPage extends StatefulWidget {
 <<<<<<< HEAD
+<<<<<<< HEAD
   const MyFinalPage({ Key? key, required String title }) : super(key: key);
 =======
   const MyFinalPage({Key? key, required String title}) : super(key: key);
 >>>>>>> 52b39158add7923a4cd59799a2bda0599a7100fe
+=======
+  const MyFinalPage({Key? key, required String id}) : super(key: key);
+>>>>>>> 496c3fec2648a42df5523659c746c78dfe09d7a4
 
   @override
   State<MyFinalPage> createState() => _MyFinalPageState();
