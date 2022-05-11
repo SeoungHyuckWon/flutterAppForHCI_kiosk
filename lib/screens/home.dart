@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ToggleSwitch(
             minWidth: 180.0,
             minHeight: 60.0,
-            fontSize: 16.0,
+            fontSize: 25.0,
             initialLabelIndex: 1,
             activeBgColor: [Colors.lightBlue],
             activeFgColor: Colors.white,
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var fido = Menu(
         id: 'C12',
         name: '플랫화이트',
-        price: 3000,
+        price: 4000,
         mainAllergy: '카페인',
         subAllergy: '커피추출액,우유',
         rankScore: 0);
