@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'final.dart';
+import 'home.dart';
 
 
 class MyDetailPage extends StatefulWidget {
@@ -158,7 +159,9 @@ class _MyDetailPageState extends State<MyDetailPage> {
                     child: RaisedButton(
                         onPressed: () {
                           color: Color.fromARGB(255, 139, 253, 131);
-                          print("click");
+                          Navigator.pop(
+                                      context,
+                                      );
                         },
                         child: Text(
                           "이전",
@@ -178,6 +181,7 @@ class _MyDetailPageState extends State<MyDetailPage> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (context) => MyFinalPage(
+                                            id: '',
                                               )));
                         },
                         color: Color.fromARGB(255, 139, 253, 131),
