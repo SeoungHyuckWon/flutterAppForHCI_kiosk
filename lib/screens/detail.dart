@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_kiosk/screens/final.dart';
 
 class MyDetailPage extends StatefulWidget {
   const MyDetailPage({Key? key, required String id}) : super(key: key);
@@ -140,7 +142,9 @@ class _MyDetailPageState extends State<MyDetailPage> {
                     onPressed: () {
                       color:
                       Color.fromARGB(255, 139, 253, 131);
-                      print("click");
+                      Navigator.pop(
+                        context,
+                      );
                     },
                     child: Text(
                       "이전",
@@ -156,7 +160,12 @@ class _MyDetailPageState extends State<MyDetailPage> {
                 height: 160,
                 child: RaisedButton(
                     onPressed: () {
-                      print("click");
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => MyFinalPage(
+                                    id: '',
+                                  )));
                     },
                     color: Color.fromARGB(255, 139, 253, 131),
                     child: Text(
