@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.lightBlue, primaryColor: Colors.white),
       // ignore: prefer_const_constructors
-      home: MyFinalPage(title: 'Flutter Demo Home Page'),
+      home: MyStartPage(title: 'Flutter Demo Home Page'),
     );
   }
 }
