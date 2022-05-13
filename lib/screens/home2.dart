@@ -73,10 +73,7 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                         child: Column(
                           children: [
                             Row(children: [
-                              Icon(Icons.thumb_up),
-                              Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 15)),
+                              loadBuilderRank('C' + (index + 1).toString()),
                               IconButton(
                                   onPressed: () {
                                     showAlertDialog(
@@ -91,7 +88,8 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (context) => MyDetailPage(
-                                                id: 'C' + index.toString(),
+                                                id: 'C' +
+                                                    (index + 1).toString(),
                                               )));
                                 },
                                 child: Image(
@@ -152,6 +150,49 @@ class _MyHomePageState2 extends State<MyHomePage2> {
               )
             ]),
           );
+        }
+      },
+      //future: loadMenu(id),
+    );
+  }
+
+  Future<List<Menu>> loadMenuRank() async {
+    DBHelperMenu sd = DBHelperMenu();
+    return await sd.findMemoRank();
+  }
+
+  Widget loadBuilderRank(String id) {
+    return FutureBuilder<List<Menu>>(
+      future: loadMenuRank(),
+      builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
+        if (snapshot.data == null || snapshot.data == []) {
+          return Container(child: Text(snapshot.data.toString()));
+        } else {
+          Menu menu1 = snapshot.data![0];
+          Menu menu2 = snapshot.data![1];
+          Menu menu3 = snapshot.data![2];
+          if (menu1.id == id || menu2.id == id || menu3.id == id) {
+            return Row(
+              children: [
+                Visibility(
+                  child: Icon(
+                    Icons.star,
+                    color: Colors.red,
+                  ),
+                  visible: true,
+                ),
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 18))
+              ],
+            );
+          } else {
+            return Row(
+              children: [
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 28))
+              ],
+            );
+          }
         }
       },
       //future: loadMenu(id),

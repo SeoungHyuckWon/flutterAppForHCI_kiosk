@@ -12,7 +12,8 @@ class Menu {
       required this.price,
       required this.mainAllergy,
       required this.subAllergy,
-      required this.rankScore});
+      required this.rankScore,
+      count});
 
   Map<String, dynamic> toMap() {
     return {

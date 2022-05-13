@@ -107,6 +107,25 @@ class DBHelperMenu {
       );
     });
   }
+
+  Future<List<Menu>> findMemoRank() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'menus',
+      orderBy: "rankScore DESC",
+      limit: 3,
+    );
+    return List.generate(maps.length, (i) {
+      return Menu(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+        price: maps[i]['price'],
+        mainAllergy: maps[i]['mainAllergy'],
+        subAllergy: maps[i]['subAllergy'],
+        rankScore: maps[i]['rankScore'],
+      );
+    });
+  }
 }
 
 class DBHelperMyOrder {
