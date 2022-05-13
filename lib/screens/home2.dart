@@ -95,7 +95,8 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                         child: Column(
                           children: [
                             Row(children: [
-                              loadBuilderRank(id + (index + 1).toString()),
+                              loadBuilderRank(
+                                  id + (index + 1).toString(), toggleState),
                               IconButton(
                                   onPressed: () {
                                     print(id + (index + 1).toString());
@@ -175,14 +176,14 @@ class _MyHomePageState2 extends State<MyHomePage2> {
     );
   }
 
-  Future<List<Menu>> loadMenuRank() async {
+  Future<List<Menu>> loadMenuRank(int toggleState) async {
     DBHelperMenu sd = DBHelperMenu();
-    return await sd.findMemoRank();
+    return await sd.findMemoRank(toggleState);
   }
 
-  Widget loadBuilderRank(String id) {
+  Widget loadBuilderRank(String id, int toggleState) {
     return FutureBuilder<List<Menu>>(
-      future: loadMenuRank(),
+      future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
           return Container(child: Text(snapshot.data.toString()));

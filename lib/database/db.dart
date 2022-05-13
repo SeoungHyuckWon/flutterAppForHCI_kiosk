@@ -108,10 +108,17 @@ class DBHelperMenu {
     });
   }
 
-  Future<List<Menu>> findMemoRank() async {
+  Future<List<Menu>> findMemoRank(int toggleState) async {
     final db = await database;
+    String str;
+    if (toggleState == 1) {
+      str = 'id LIKE "C%"';
+    } else {
+      str = 'id LIKE "J%"';
+    }
     final List<Map<String, dynamic>> maps = await db.query(
       'menus',
+      where: str,
       orderBy: "rankScore DESC",
       limit: 3,
     );

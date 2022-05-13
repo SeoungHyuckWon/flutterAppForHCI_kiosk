@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   late BuildContext _context;
   String id = '';
-  int toggleState = 1;
+  int toggleState = 0;
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
@@ -67,6 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 toggleState = index!;
               });
+              //saveDB();
+              //deleteMenu(id);
             },
           ),
         ]),
@@ -95,7 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Column(
                           children: [
                             Row(children: [
-                              loadBuilderRank(id + (index + 1).toString()),
+                              loadBuilderRank(
+                                  id + (index + 1).toString(), toggleState),
                               IconButton(
                                   onPressed: () {
                                     print(id + (index + 1).toString());
@@ -121,6 +124,27 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ]),
     );
+  }
+
+  Future<void> saveDB() async {
+    DBHelperMenu sd = DBHelperMenu();
+
+    var fido = Menu(
+        id: 'J12',
+        name: '블루베리주스',
+        price: 4000,
+        mainAllergy: '블루베리',
+        subAllergy: '꿀,우유',
+        rankScore: 0);
+
+    await sd.insertMenu(fido);
+
+    print(await sd.menus());
+  }
+
+  Future<void> deleteMenu(String id) async {
+    DBHelperMenu sd = DBHelperMenu();
+    sd.deleteMenu(id);
   }
 
   Future<List<Menu>> loadMenu(String id) async {
@@ -175,14 +199,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<List<Menu>> loadMenuRank() async {
+  Future<List<Menu>> loadMenuRank(int toggleState) async {
     DBHelperMenu sd = DBHelperMenu();
-    return await sd.findMemoRank();
+    return await sd.findMemoRank(toggleState);
   }
 
-  Widget loadBuilderRank(String id) {
+  Widget loadBuilderRank(String id, int toggleState) {
     return FutureBuilder<List<Menu>>(
-      future: loadMenuRank(),
+      future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
           return Container(child: Text(snapshot.data.toString()));
