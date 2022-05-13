@@ -29,8 +29,23 @@ class _MyHomePageState2 extends State<MyHomePage2> {
     "assets/coffee_img/11.png",
     "assets/coffee_img/12.png"
   ];
+  List<String> juiceImg = [
+    "assets/juice_img/01.png",
+    "assets/juice_img/02.png",
+    "assets/juice_img/03.png",
+    "assets/juice_img/04.png",
+    "assets/juice_img/05.png",
+    "assets/juice_img/06.png",
+    "assets/juice_img/07.png",
+    "assets/juice_img/08.png",
+    "assets/juice_img/09.png",
+    "assets/juice_img/10.png",
+    "assets/juice_img/11.png",
+    "assets/juice_img/12.png"
+  ];
   late BuildContext _context;
   String id = '';
+  int toggleState = 1;
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
@@ -40,16 +55,18 @@ class _MyHomePageState2 extends State<MyHomePage2> {
           ToggleSwitch(
             minWidth: 180.0,
             minHeight: 60.0,
-            fontSize: 16.0,
-            initialLabelIndex: 1,
+            fontSize: 30.0,
             activeBgColor: [Colors.lightBlue],
             activeFgColor: Colors.white,
             inactiveBgColor: Colors.grey,
             inactiveFgColor: Colors.grey[900],
             totalSwitches: 2,
+            initialLabelIndex: toggleState,
             labels: ['주스', '커피'],
             onToggle: (index) {
-              print('switched to: $index');
+              setState(() {
+                toggleState = index!;
+              });
             },
           ),
         ]),
@@ -67,17 +84,23 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                     crossAxisSpacing: 10,
                   ),
                   itemBuilder: (BuildContext context, int index) {
+                    if (toggleState == 0) {
+                      id = 'J';
+                    } else {
+                      id = 'C';
+                    }
                     return Container(
                         margin: EdgeInsets.all(10),
                         //color: Colors.lightBlue,
                         child: Column(
                           children: [
                             Row(children: [
-                              loadBuilderRank('C' + (index + 1).toString()),
+                              loadBuilderRank(id + (index + 1).toString()),
                               IconButton(
                                   onPressed: () {
+                                    print(id + (index + 1).toString());
                                     showAlertDialog(
-                                        'C' + (index + 1).toString());
+                                        id + (index + 1).toString());
                                   },
                                   icon: Icon(Icons.search))
                             ]),
@@ -88,14 +111,10 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (context) => MyDetailPage(
-                                                id: 'C' +
-                                                    (index + 1).toString(),
+                                                id: id + (index + 1).toString(),
                                               )));
                                 },
-                                child: Image(
-                                    //alignment: Alignment.bottomCenter,
-                                    image: AssetImage(coffeeImg[index]),
-                                    fit: BoxFit.fitWidth))
+                                child: showmenu(toggleState, index))
                           ],
                         ));
                   })),
@@ -218,5 +237,19 @@ class _MyHomePageState2 extends State<MyHomePage2> {
         );
       },
     );
+  }
+
+  Widget showmenu(int toggleState, int index) {
+    if (toggleState == 1) {
+      return Image(
+          //alignment: Alignment.bottomCenter,
+          image: AssetImage(coffeeImg[index]),
+          fit: BoxFit.fitWidth);
+    } else {
+      return Image(
+          //alignment: Alignment.bottomCenter,
+          image: AssetImage(juiceImg[index]),
+          fit: BoxFit.fitWidth);
+    }
   }
 }
