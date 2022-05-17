@@ -7,16 +7,23 @@ import 'package:flutter_application_kiosk/database/myOrder.dart';
 import 'final.dart';
 import 'home.dart';
 
-class MyDetailPage extends StatelessWidget {
-  final String id ;
-  MyDetailPage({Key? key, required this.id}) : super(key: key);
+class MyDetailPage extends StatefulWidget {
 
+  MyDetailPage({Key? key, required this.id}) : super(key: key);
+  final String id ;
+  @override
+  State<MyDetailPage> createState() => _MyDetailPageState();
+}
+
+class _MyDetailPageState extends State<MyDetailPage> {
   @override
  // late BuildContext _context;
   Widget build(BuildContext context) {
    // _context = context;
+
     String myname='';
     int myprice =0;
+    var backcolor = Color.fromARGB(255, 139, 253, 131);
     return Scaffold(
       body: Container(
         margin: EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -28,12 +35,16 @@ class MyDetailPage extends StatelessWidget {
 
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SizedBox(
+
                 width: 140,
                 height: 120,
                 child: RaisedButton(
+
                     onPressed: () {
-                      color:
-                      Color.fromARGB(255, 139, 253, 131);
+                      setState(() {
+                        backcolor = (backcolor == Colors.grey) ? Color.fromARGB(255, 139, 253, 131) : Colors.grey;
+                      });
+
 
                     },
                     child: Text(
@@ -49,9 +60,11 @@ class MyDetailPage extends StatelessWidget {
                 width: 140,
                 height: 120,
                 child: RaisedButton(
+
                     onPressed: () {
+                     color: Color.fromARGB(255, 139, 253, 131);
                       FutureBuilder<List<Menu>>(
-                        future: findOrder(id),
+                        future: findOrder(widget.id),
                         builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
                           if (snapshot.data == null || snapshot.data == []) {
                             return Container(child: Text("데이터를 불러올 수 없습니다."));
@@ -66,7 +79,7 @@ class MyDetailPage extends StatelessWidget {
                       );
 
                       },
-                    color: Color.fromARGB(255, 139, 253, 131),
+                    //color: Colors.grey[900],
                     child: Text(
                       "+800원",
                       style:
@@ -87,7 +100,7 @@ class MyDetailPage extends StatelessWidget {
                       color:
                       Color.fromARGB(255, 139, 253, 131);
                       FutureBuilder<List<Menu>>(
-                        future: findOrder(id),
+                        future: findOrder(widget.id),
                         builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
                           if (snapshot.data == null || snapshot.data == []) {
                             return Container(child: Text("데이터를 불러올 수 없습니다."));
@@ -116,9 +129,10 @@ class MyDetailPage extends StatelessWidget {
                 height: 135,
                 child: RaisedButton(
                     onPressed: () {
-                      print("click");
+                      color: Color.fromARGB(255, 139, 253, 131);
+
                     },
-                    color: Color.fromARGB(255, 139, 253, 131),
+
                     child: Text(
                       "아니오",
                       style:
@@ -139,7 +153,7 @@ class MyDetailPage extends StatelessWidget {
                       color:
                       Color.fromARGB(255, 139, 253, 131);
                       FutureBuilder<List<Menu>>(
-                        future: findOrder(id),
+                        future: findOrder(widget.id),
                         builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
                           if (snapshot.data == null || snapshot.data == []) {
                             return Container(child: Text("데이터를 불러올 수 없습니다."));
@@ -167,9 +181,10 @@ class MyDetailPage extends StatelessWidget {
                 height: 135,
                 child: RaisedButton(
                     onPressed: () {
-                      print("click");
+                      Color.fromARGB(255, 139, 253, 131);
+
                     },
-                    color: Color.fromARGB(255, 139, 253, 131),
+
                     child: Text(
                       "아니오",
                       style:
@@ -181,6 +196,7 @@ class MyDetailPage extends StatelessWidget {
             ]),
             //Text('',
                 //style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+            //Padding(padding: EdgeInsets.all(10)),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SizedBox(
                 width: 140,
@@ -191,7 +207,7 @@ class MyDetailPage extends StatelessWidget {
                           context,
                           );
                       Color.fromARGB(255, 139, 253, 131);
-                      print("click");
+
                     },
                     child: Text(
                       "이전",
@@ -207,15 +223,17 @@ class MyDetailPage extends StatelessWidget {
                 height: 160,
                 child: RaisedButton(
                     onPressed: () {
+                      Color.fromARGB(255, 139, 253, 131);
                       saveOrder(myname, myprice);
+                      print(myname);
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
                               builder: (context) => MyFinalPage(
-                                 id:id,
+                                 id:widget.id,
                               )));
                     },
-                    color: Color.fromARGB(255, 139, 253, 131),
+                    //color: Color.fromARGB(255, 139, 253, 131),
                     child: Text(
                       "다음",
                       style:
@@ -257,18 +275,11 @@ class MyDetailPage extends StatelessWidget {
         name: name,
         price: price,
         count: 1,
-        id: id
+        id: widget.id
     );
 
     await sd.insertMyOrder(fido);
 
-  }
-
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
   }
 
 
