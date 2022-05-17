@@ -7,7 +7,7 @@ import 'package:flutter_application_kiosk/database/myOrder.dart';
 import 'final.dart';
 import 'home.dart';
 
-class MyDetailPage extends StatefulWidget {
+class MyDetailPage extends StatelessWidget {
   final String id ;
   MyDetailPage({Key? key, required this.id}) : super(key: key);
 
