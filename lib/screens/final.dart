@@ -16,6 +16,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
   @override
   final List<String> entries = <String>['아메리카노/S','카페라떼/L','에스프레소/S'];
   final List<int> colorCodes = <int>[3500,4000,3000];
+  int count = 1;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,11 +42,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
                       height: 150,
                       child: RaisedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => MyHomePage(
-                                  )));
+                            print("click");
                           },
                           color: Color.fromARGB(255, 255, 255, 255),
                           child: Text(
@@ -82,7 +79,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
                   height: 60,
                   child: RaisedButton(
                       onPressed: () {
-                        saveDB();
+                        //saveDB();
                       },
                       color: Color.fromARGB(255, 255, 1, 1),
                       child: Text(
@@ -129,29 +126,69 @@ class _MyFinalPageState extends State<MyFinalPage> {
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           child: Card(
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   entries[index],
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25,
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20)),
                 Container(
-                  child: Text(
-                    '${colorCodes[index]}',
-                    maxLines: 3,
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
+                  child: Row(
+                    children: [
+                      Text('수량 :  ',
+                      style: TextStyle(fontSize: 23, color: Colors.grey),
                   ),
+                  InkWell(
+                    onTap:() {
+                      setState(() {
+                        count++;
+                      });
+                    },
+                    child: Icon(
+                    Icons.add_circle,
+                    color: Colors.blue,
+                    size: 30,
+                  ),
+                    ),
+                  Text('  $count  ',
+                  style: TextStyle(fontSize: 23, color: Colors.grey),
+                  ),
+                  InkWell(
+                    onTap:() {
+                      setState(() {
+                        count--;
+                      });
+                    },
+                    child: Icon(
+                    Icons.remove_circle,
+                    color: Colors.blue,
+                    size: 30,
+                  ),
+                    ),
+                    Text(' 가격: ${colorCodes[index]}  ',
+                    style: TextStyle(fontSize: 23, color: Colors.grey),),
+                    InkWell(
+                    onTap:() {
+                      setState(() {
+                        // 메뉴 삭제 상태 만들기
+                      });
+                    },
+                    child: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                    ),
+                    ],)
                 ),
               ],
             )
           )
-          
         );
       },
     );
