@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   late BuildContext _context;
   String id = '';
-  int toggleState = 0;
+  int toggleState = 1;
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
               setState(() {
                 toggleState = index!;
               });
-              //saveDB();
+              saveDB();
               //deleteMenu(id);
             },
           ),
@@ -130,11 +130,11 @@ class _MyHomePageState extends State<MyHomePage> {
     DBHelperMenu sd = DBHelperMenu();
 
     var fido = Menu(
-        id: 'J12',
-        name: '블루베리주스',
-        price: 4000,
-        mainAllergy: '블루베리',
-        subAllergy: '꿀,우유',
+        id: 'C1',
+        name: '에스프레소',
+        price: 2000,
+        mainAllergy: '카페인',
+        subAllergy: '커피추출액',
         rankScore: 0);
 
     await sd.insertMenu(fido);
@@ -159,7 +159,6 @@ class _MyHomePageState extends State<MyHomePage> {
         if (snapshot.data == null || snapshot.data == []) {
           return Container(child: Text("데이터를 불러올 수 없습니다."));
         } else {
-          print(snapshot.data);
           Menu menu = snapshot.data![0];
           return SingleChildScrollView(
             child: ListBody(children: [

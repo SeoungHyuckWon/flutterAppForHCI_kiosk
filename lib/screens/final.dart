@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_kiosk/database/db.dart';
 import 'package:flutter_application_kiosk/database/myOrder.dart';
-import 'package:flutter_application_kiosk/screens/home.dart';
-import 'package:flutter_application_kiosk/screens/start.dart';
 
 class MyFinalPage extends StatefulWidget {
   const MyFinalPage({Key? key, required String id}) : super(key: key);
@@ -14,23 +12,29 @@ class MyFinalPage extends StatefulWidget {
 
 class _MyFinalPageState extends State<MyFinalPage> {
   @override
-  final List<String> entries = <String>['아메리카노/S','카페라떼/L','에스프레소/S'];
-  final List<int> colorCodes = <int>[3500,4000,3000];
-  int count = 1;
-
+  late BuildContext _context;
+  // List<String> name = [];
+  // List<int> price = [];
+  // List<int> count = [];
+  // List<String> id = [];
+  // String name = '';
+  // int price = 0;
+  // int count = 0;
+  // String id = '';
   Widget build(BuildContext context) {
+    _context = context;
     return Scaffold(
         body: Container(
             alignment: Alignment.center,
             child: Column(
               children: [
                 Container(
-                  child: listview_builder(),
+                    child: myOrderBuilder(context),
                     width: 350,
                     height: 350,
                     color: Color.fromARGB(255, 208, 237, 176),
                     margin: EdgeInsets.only(top: 30)),
-                Text('총액:    ${colorCodes[1]}원',
+                Text('총액:    }원',
                     style:
                         TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
                 SizedBox(height: 10.0),
@@ -57,9 +61,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
                       width: 130,
                       height: 150,
                       child: RaisedButton(
-                          onPressed: () {
-                            print("click");
-                          },
+                          onPressed: () {},
                           color: Color.fromARGB(255, 139, 253, 131),
                           child: Text(
                             "결제하기",
@@ -79,7 +81,9 @@ class _MyFinalPageState extends State<MyFinalPage> {
                   height: 60,
                   child: RaisedButton(
                       onPressed: () {
-                        //saveDB();
+                        setState(() {
+                          saveDB();
+                        });
                       },
                       color: Color.fromARGB(255, 255, 1, 1),
                       child: Text(
@@ -93,15 +97,16 @@ class _MyFinalPageState extends State<MyFinalPage> {
               ],
             )));
   }
+
   Future<void> saveDB() async {
-    DBHelperMyOrder sd = DBHelperMyOrder();
+    DBHelperMenu sd = DBHelperMenu();
 
     var fido = MyOrder(
-        name: '아메리카노/S/시럽/얼음',
-        price: 3000,
-        count : 1,
-        id: 'C2',
-        );
+      name: '아메리카노/L/시럽/얼음',
+      price: 3800,
+      count: 1,
+      id: 'C2',
+    );
 
     await sd.insertMyOrder(fido);
 
@@ -109,88 +114,153 @@ class _MyFinalPageState extends State<MyFinalPage> {
   }
 
   Future<void> deleteMyOrder(String name) async {
-    DBHelperMyOrder sd = DBHelperMyOrder();
+    DBHelperMenu sd = DBHelperMenu();
     sd.deleteMyOrder(name);
   }
 
-  Future<List<MyOrder>> loadMyOrder(String name) async {
-    DBHelperMyOrder sd = DBHelperMyOrder();
+  Future<List<MyOrder>> findMyOrder(String name) async {
+    DBHelperMenu sd = DBHelperMenu();
     return await sd.findMyOrder(name);
   }
 
+  Future<List<MyOrder>> loadMyOrder() async {
+    DBHelperMenu sd = DBHelperMenu();
+    return await sd.myorder();
+  }
 
-  Widget listview_builder() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(8),
-      itemCount: entries.length,
-      itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          child: Card(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  entries[index],
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
+  void updateDB(String name, int price, int count, String id) {
+    DBHelperMenu sd = DBHelperMenu();
+
+    var fido = MyOrder(name: name, price: price, count: count, id: id);
+    sd.updateMyOrder(fido);
+  }
+
+  Widget myOrderBuilder(BuildContext parentContext) {
+    return FutureBuilder<List<MyOrder>>(
+      builder: (context, snap) {
+        if (snap.data == null || snap.data!.isEmpty) {
+          return Container(
+            alignment: Alignment.center,
+            child: Text(
+              '장바구니에 메뉴가 존재하지 않습니다.',
+              style: TextStyle(fontSize: 15, color: Colors.blueAccent),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+        return ListView.builder(
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.all(20),
+          itemCount: snap.data?.length,
+          itemBuilder: (context, index) {
+            MyOrder myorder = snap.data![index];
+            //int cnt = myorder.count;
+            // name = myorder.name;
+            // price = myorder.price;
+            // count = myorder.count;
+            // id = myorder.id;
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    myorder.name,
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Container(
-                  child: Row(
+                  Text(
+                    "가격: " + myorder.price.toString(),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  Column(
                     children: [
-                      Text('수량 :  ',
-                      style: TextStyle(fontSize: 23, color: Colors.grey),
-                  ),
-                  InkWell(
-                    onTap:() {
-                      setState(() {
-                        count++;
-                      });
-                    },
-                    child: Icon(
-                    Icons.add_circle,
-                    color: Colors.blue,
-                    size: 30,
-                  ),
-                    ),
-                  Text('  $count  ',
-                  style: TextStyle(fontSize: 23, color: Colors.grey),
-                  ),
-                  InkWell(
-                    onTap:() {
-                      setState(() {
-                        count--;
-                      });
-                    },
-                    child: Icon(
-                    Icons.remove_circle,
-                    color: Colors.blue,
-                    size: 30,
-                  ),
-                    ),
-                    Text(' 가격: ${colorCodes[index]}  ',
-                    style: TextStyle(fontSize: 23, color: Colors.grey),),
-                    InkWell(
-                    onTap:() {
-                      setState(() {
-                        // 메뉴 삭제 상태 만들기
-                      });
-                    },
-                    child: Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                    size: 30,
-                  ),
-                    ),
-                    ],)
+                      Row(
+                        children: [
+                          Text(
+                            '수량 :  ',
+                            style: TextStyle(fontSize: 20, color: Colors.grey),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0)),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                updateDB(myorder.name, myorder.price,
+                                    myorder.count + 1, myorder.id);
+                              });
+                            },
+                            child: Icon(
+                              Icons.add_circle,
+                              color: Colors.blue,
+                              size: 30,
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 5)),
+                          Text(
+                            myorder.count.toString(),
+                            style: TextStyle(fontSize: 23, color: Colors.grey),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 5)),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                updateDB(myorder.name, myorder.price,
+                                    myorder.count - 1, myorder.id);
+                              });
+                            },
+                            child: Icon(
+                              Icons.remove_circle,
+                              color: Colors.blue,
+                              size: 30,
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 50)),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                deleteMyOrder(myorder.name);
+                              });
+                            },
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(240, 240, 240, 1),
+                border: Border.all(
+                  color: Colors.blue,
+                  width: 1,
                 ),
-              ],
-            )
-          )
+                //boxShadow: [BoxShadow(color: Colors.lightBlue, blurRadius: 3)],
+                borderRadius: BorderRadius.circular(12),
+              ),
+            );
+          },
         );
       },
+      future: loadMyOrder(),
     );
   }
 }
