@@ -196,11 +196,6 @@ class _MyFinalPageState extends State<MyFinalPage> {
           itemCount: snap.data?.length,
           itemBuilder: (context, index) {
             MyOrder myorder = snap.data![index];
-            //int cnt = myorder.count;
-            // name = myorder.name;
-            // price = myorder.price;
-            // count = myorder.count;
-            // id = myorder.id;
             return Column(children: [
               Container(
                 padding: EdgeInsets.all(10),
@@ -237,8 +232,12 @@ class _MyFinalPageState extends State<MyFinalPage> {
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  updateDB(myorder.name, myorder.price,
-                                      myorder.count + 1, myorder.id);
+                                  if (myorder.count < 9) {
+                                    setState(() {
+                                      updateDB(myorder.name, myorder.price,
+                                          myorder.count + 1, myorder.id);
+                                    });
+                                  }
                                 });
                               },
                               child: Icon(

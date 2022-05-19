@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 7.5 / 10,
-                    //mainAxisExtent: 200,
+                    //mainAxisExtent: 350,
                     crossAxisSpacing: 10,
                   ),
                   itemBuilder: (BuildContext context, int index) {
@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
       future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
-          //insertMenuAll();
+          insertMenuAll();
           return Container(child: Text(snapshot.data.toString()));
         } else {
           Menu menu1 = snapshot.data![0];

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_kiosk/database/db.dart';
 import 'package:flutter_application_kiosk/database/menu.dart';
+import 'package:flutter_application_kiosk/screens/detail2.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_application_kiosk/screens/detail.dart';
@@ -111,7 +112,7 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                                   Navigator.push(
                                       context,
                                       CupertinoPageRoute(
-                                          builder: (context) => MyDetailPage(
+                                          builder: (context) => MyDetailPage2(
                                                 id: id + (index + 1).toString(),
                                               )));
                                 },

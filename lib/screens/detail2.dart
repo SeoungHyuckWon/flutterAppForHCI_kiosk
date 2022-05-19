@@ -154,7 +154,7 @@ class _MyDetailPage2State extends State<MyDetailPage2> {
             height: 70,
             child: RaisedButton(
                 onPressed: () {
-                  if (newSize == '/S') {
+                  if (newSize == 'S/') {
                     price = 0;
                   } else {
                     price = 800;
