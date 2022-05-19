@@ -33,7 +33,7 @@ class _MyStartPageState extends State<MyStartPage> {
                           onPressed: () {
                             goToHome();
                           },
-                          color: Colors.lightBlue,
+                          color: Colors.lightBlue[200],
                           child: Text(
                             "매장",
                             style: TextStyle(
@@ -51,7 +51,7 @@ class _MyStartPageState extends State<MyStartPage> {
                           onPressed: () {
                             goToHome();
                           },
-                          color: Colors.lightBlue,
+                          color: Colors.lightBlue[200],
                           child: Text(
                             "포장",
                             style: TextStyle(

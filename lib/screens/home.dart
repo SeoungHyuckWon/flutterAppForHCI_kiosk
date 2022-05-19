@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_kiosk/database/db.dart';
 import 'package:flutter_application_kiosk/database/menu.dart';
+import 'package:flutter_application_kiosk/screens/detail2.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_application_kiosk/screens/detail.dart';
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
             minWidth: 180.0,
             minHeight: 60.0,
             fontSize: 30.0,
-            activeBgColor: [Colors.lightBlue],
+            activeBgColor: [Colors.lightBlue.shade200],
             activeFgColor: Colors.white,
             inactiveBgColor: Colors.grey,
             inactiveFgColor: Colors.grey[900],
@@ -64,11 +65,12 @@ class _MyHomePageState extends State<MyHomePage> {
             initialLabelIndex: toggleState,
             labels: ['주스', '커피'],
             onToggle: (index) {
+              //insertMenuAll();
               setState(() {
                 toggleState = index!;
               });
-              saveDB();
-              //deleteMenu(id);
+              //saveDB();
+              //deleteMenu('C3');
             },
           ),
         ]),
@@ -113,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Navigator.push(
                                       context,
                                       CupertinoPageRoute(
-                                          builder: (context) => MyDetailPage(
+                                          builder: (context) => MyDetailPage2(
                                                 id: id + (index + 1).toString(),
                                               )));
                                 },
@@ -130,11 +132,11 @@ class _MyHomePageState extends State<MyHomePage> {
     DBHelperMenu sd = DBHelperMenu();
 
     var fido = Menu(
-        id: 'C1',
-        name: '에스프레소',
-        price: 2000,
-        mainAllergy: '카페인',
-        subAllergy: '커피추출액',
+        id: 'J12',
+        name: '블루베리주스',
+        price: 5000,
+        mainAllergy: '블루베리',
+        subAllergy: '꿀, 우유',
         rankScore: 0);
 
     await sd.insertMenu(fido);
@@ -203,11 +205,17 @@ class _MyHomePageState extends State<MyHomePage> {
     return await sd.findMemoRank(toggleState);
   }
 
+  Future<void> insertMenuAll() async {
+    DBHelperMenu sd = DBHelperMenu();
+    await sd.insertMenuAll();
+  }
+
   Widget loadBuilderRank(String id, int toggleState) {
     return FutureBuilder<List<Menu>>(
       future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
+          //insertMenuAll();
           return Container(child: Text(snapshot.data.toString()));
         } else {
           Menu menu1 = snapshot.data![0];

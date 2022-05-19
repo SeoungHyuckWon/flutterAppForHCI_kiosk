@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_kiosk/database/db.dart';
 import 'package:flutter_application_kiosk/database/myOrder.dart';
+import 'package:flutter_application_kiosk/database/total.dart';
 
 class MyFinalPage extends StatefulWidget {
   const MyFinalPage({Key? key, required String id}) : super(key: key);
@@ -13,14 +14,6 @@ class MyFinalPage extends StatefulWidget {
 class _MyFinalPageState extends State<MyFinalPage> {
   @override
   late BuildContext _context;
-  // List<String> name = [];
-  // List<int> price = [];
-  // List<int> count = [];
-  // List<String> id = [];
-  // String name = '';
-  // int price = 0;
-  // int count = 0;
-  // String id = '';
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
@@ -32,11 +25,9 @@ class _MyFinalPageState extends State<MyFinalPage> {
                     child: myOrderBuilder(context),
                     width: 350,
                     height: 350,
-                    color: Color.fromARGB(255, 208, 237, 176),
+                    color: Colors.lightBlue[50],
                     margin: EdgeInsets.only(top: 30)),
-                Text('총액:    }원',
-                    style:
-                        TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                myTotalBuilder(context),
                 SizedBox(height: 10.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,9 +37,10 @@ class _MyFinalPageState extends State<MyFinalPage> {
                       height: 150,
                       child: RaisedButton(
                           onPressed: () {
-                            print("click");
+                            int count = 0;
+                            Navigator.of(context).popUntil((_) => count++ >= 2);
                           },
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Colors.lightBlue[200],
                           child: Text(
                             "메뉴추가",
                             style: TextStyle(
@@ -62,7 +54,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
                       height: 150,
                       child: RaisedButton(
                           onPressed: () {},
-                          color: Color.fromARGB(255, 139, 253, 131),
+                          color: Colors.lightBlue[200],
                           child: Text(
                             "결제하기",
                             style: TextStyle(
@@ -82,10 +74,12 @@ class _MyFinalPageState extends State<MyFinalPage> {
                   child: RaisedButton(
                       onPressed: () {
                         setState(() {
-                          saveDB();
+                          deleteMyOrderAll();
                         });
+                        int count = 0;
+                        Navigator.of(context).popUntil((_) => count++ >= 3);
                       },
-                      color: Color.fromARGB(255, 255, 1, 1),
+                      color: Colors.red,
                       child: Text(
                         "전체주문취소",
                         style: TextStyle(
@@ -118,6 +112,11 @@ class _MyFinalPageState extends State<MyFinalPage> {
     sd.deleteMyOrder(name);
   }
 
+  Future<void> deleteMyOrderAll() async {
+    DBHelperMenu sd = DBHelperMenu();
+    sd.deleteMyOrderAll();
+  }
+
   Future<List<MyOrder>> findMyOrder(String name) async {
     DBHelperMenu sd = DBHelperMenu();
     return await sd.findMyOrder(name);
@@ -135,6 +134,46 @@ class _MyFinalPageState extends State<MyFinalPage> {
     sd.updateMyOrder(fido);
   }
 
+  Future<List<Total>> gettotal() async {
+    DBHelperMenu sd = DBHelperMenu();
+    return await sd.getTotal();
+  }
+
+  Widget myTotalBuilder(BuildContext parentContext) {
+    return FutureBuilder<List<Total>>(
+      builder: (context, snap) {
+        if (snap.data == null || snap.data!.isEmpty) {
+          return Container(
+            alignment: Alignment.center,
+            child: Text(
+              '총: 0원',
+              style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          );
+        } else {
+          Total total = snap.data![0];
+          return Container(
+            alignment: Alignment.center,
+            //Total total = snap.data![0];
+            child: Text(
+              '총 : ' + total.sum.toString() + '원',
+              style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+      },
+      future: gettotal(),
+    );
+  }
+
   Widget myOrderBuilder(BuildContext parentContext) {
     return FutureBuilder<List<MyOrder>>(
       builder: (context, snap) {
@@ -142,8 +181,11 @@ class _MyFinalPageState extends State<MyFinalPage> {
           return Container(
             alignment: Alignment.center,
             child: Text(
-              '장바구니에 메뉴가 존재하지 않습니다.',
-              style: TextStyle(fontSize: 15, color: Colors.blueAccent),
+              '장바구니에 메뉴가\n존재하지 않습니다.',
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           );
@@ -159,104 +201,112 @@ class _MyFinalPageState extends State<MyFinalPage> {
             // price = myorder.price;
             // count = myorder.count;
             // id = myorder.id;
-            return Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    myorder.name,
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
+            return Column(children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      myorder.name,
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "가격: " + myorder.price.toString(),
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black54,
+                    Text(
+                      "가격: " + myorder.price.toString(),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black54,
+                      ),
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '수량 :  ',
-                            style: TextStyle(fontSize: 20, color: Colors.grey),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 0)),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                updateDB(myorder.name, myorder.price,
-                                    myorder.count + 1, myorder.id);
-                              });
-                            },
-                            child: Icon(
-                              Icons.add_circle,
-                              color: Colors.blue,
-                              size: 30,
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '수량 :  ',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.grey),
                             ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 5)),
-                          Text(
-                            myorder.count.toString(),
-                            style: TextStyle(fontSize: 23, color: Colors.grey),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 5)),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                updateDB(myorder.name, myorder.price,
-                                    myorder.count - 1, myorder.id);
-                              });
-                            },
-                            child: Icon(
-                              Icons.remove_circle,
-                              color: Colors.blue,
-                              size: 30,
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 0)),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  updateDB(myorder.name, myorder.price,
+                                      myorder.count + 1, myorder.id);
+                                });
+                              },
+                              child: Icon(
+                                Icons.add_circle,
+                                color: Colors.blue,
+                                size: 30,
+                              ),
                             ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 50)),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                deleteMyOrder(myorder.name);
-                              });
-                            },
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                              size: 30,
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 5)),
+                            Text(
+                              myorder.count.toString(),
+                              style:
+                                  TextStyle(fontSize: 23, color: Colors.grey),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 240, 240, 1),
-                border: Border.all(
-                  color: Colors.blue,
-                  width: 1,
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 5)),
+                            InkWell(
+                              onTap: () {
+                                if (myorder.count > 1) {
+                                  setState(() {
+                                    updateDB(myorder.name, myorder.price,
+                                        myorder.count - 1, myorder.id);
+                                  });
+                                }
+                              },
+                              child: Icon(
+                                Icons.remove_circle,
+                                color: Colors.blue,
+                                size: 30,
+                              ),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 50)),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  deleteMyOrder(myorder.name);
+                                });
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    )
+                  ],
                 ),
-                //boxShadow: [BoxShadow(color: Colors.lightBlue, blurRadius: 3)],
-                borderRadius: BorderRadius.circular(12),
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(240, 240, 240, 1),
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 1,
+                  ),
+                  //boxShadow: [BoxShadow(color: Colors.lightBlue, blurRadius: 3)],
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
-            );
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0)),
+            ]);
           },
         );
       },
