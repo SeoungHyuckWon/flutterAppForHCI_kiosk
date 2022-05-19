@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_kiosk/screens/final.dart';
 import 'screens/start.dart';
 
 void main() {

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_kiosk/database/db.dart';
 import 'package:flutter_application_kiosk/database/menu.dart';
+import 'package:flutter_application_kiosk/screens/detail2.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_application_kiosk/screens/detail.dart';
@@ -29,8 +30,23 @@ class _MyHomePageState2 extends State<MyHomePage2> {
     "assets/coffee_img/11.png",
     "assets/coffee_img/12.png"
   ];
+  List<String> juiceImg = [
+    "assets/juice_img/01.png",
+    "assets/juice_img/02.png",
+    "assets/juice_img/03.png",
+    "assets/juice_img/04.png",
+    "assets/juice_img/05.png",
+    "assets/juice_img/06.png",
+    "assets/juice_img/07.png",
+    "assets/juice_img/08.png",
+    "assets/juice_img/09.png",
+    "assets/juice_img/10.png",
+    "assets/juice_img/11.png",
+    "assets/juice_img/12.png"
+  ];
   late BuildContext _context;
   String id = '';
+  int toggleState = 1;
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
@@ -40,16 +56,18 @@ class _MyHomePageState2 extends State<MyHomePage2> {
           ToggleSwitch(
             minWidth: 180.0,
             minHeight: 60.0,
-            fontSize: 16.0,
-            initialLabelIndex: 1,
+            fontSize: 30.0,
             activeBgColor: [Colors.lightBlue],
             activeFgColor: Colors.white,
             inactiveBgColor: Colors.grey,
             inactiveFgColor: Colors.grey[900],
             totalSwitches: 2,
+            initialLabelIndex: toggleState,
             labels: ['주스', '커피'],
             onToggle: (index) {
-              print('switched to: $index');
+              setState(() {
+                toggleState = index!;
+              });
             },
           ),
         ]),
@@ -67,20 +85,24 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                     crossAxisSpacing: 10,
                   ),
                   itemBuilder: (BuildContext context, int index) {
+                    if (toggleState == 0) {
+                      id = 'J';
+                    } else {
+                      id = 'C';
+                    }
                     return Container(
                         margin: EdgeInsets.all(10),
                         //color: Colors.lightBlue,
                         child: Column(
                           children: [
                             Row(children: [
-                              Icon(Icons.thumb_up),
-                              Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 15)),
+                              loadBuilderRank(
+                                  id + (index + 1).toString(), toggleState),
                               IconButton(
                                   onPressed: () {
+                                    print(id + (index + 1).toString());
                                     showAlertDialog(
-                                        'C' + (index + 1).toString());
+                                        id + (index + 1).toString());
                                   },
                                   icon: Icon(Icons.search))
                             ]),
@@ -90,14 +112,11 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                                   Navigator.push(
                                       context,
                                       CupertinoPageRoute(
-                                          builder: (context) => MyDetailPage(
-                                                id: 'C' + index.toString(),
+                                          builder: (context) => MyDetailPage2(
+                                                id: id + (index + 1).toString(),
                                               )));
                                 },
-                                child: Image(
-                                    //alignment: Alignment.bottomCenter,
-                                    image: AssetImage(coffeeImg[index]),
-                                    fit: BoxFit.fitWidth))
+                                child: showmenu(toggleState, index))
                           ],
                         ));
                   })),
@@ -158,6 +177,49 @@ class _MyHomePageState2 extends State<MyHomePage2> {
     );
   }
 
+  Future<List<Menu>> loadMenuRank(int toggleState) async {
+    DBHelperMenu sd = DBHelperMenu();
+    return await sd.findMemoRank(toggleState);
+  }
+
+  Widget loadBuilderRank(String id, int toggleState) {
+    return FutureBuilder<List<Menu>>(
+      future: loadMenuRank(toggleState),
+      builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
+        if (snapshot.data == null || snapshot.data == []) {
+          return Container(child: Text(snapshot.data.toString()));
+        } else {
+          Menu menu1 = snapshot.data![0];
+          Menu menu2 = snapshot.data![1];
+          Menu menu3 = snapshot.data![2];
+          if (menu1.id == id || menu2.id == id || menu3.id == id) {
+            return Row(
+              children: [
+                Visibility(
+                  child: Icon(
+                    Icons.star,
+                    color: Colors.red,
+                  ),
+                  visible: true,
+                ),
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 18))
+              ],
+            );
+          } else {
+            return Row(
+              children: [
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 28))
+              ],
+            );
+          }
+        }
+      },
+      //future: loadMenu(id),
+    );
+  }
+
   void showAlertDialog(String id) async {
     await showDialog(
       context: _context,
@@ -177,5 +239,19 @@ class _MyHomePageState2 extends State<MyHomePage2> {
         );
       },
     );
+  }
+
+  Widget showmenu(int toggleState, int index) {
+    if (toggleState == 1) {
+      return Image(
+          //alignment: Alignment.bottomCenter,
+          image: AssetImage(coffeeImg[index]),
+          fit: BoxFit.fitWidth);
+    } else {
+      return Image(
+          //alignment: Alignment.bottomCenter,
+          image: AssetImage(juiceImg[index]),
+          fit: BoxFit.fitWidth);
+    }
   }
 }
