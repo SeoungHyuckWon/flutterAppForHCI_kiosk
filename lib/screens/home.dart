@@ -107,7 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     showAlertDialog(
                                         id + (index + 1).toString());
                                   },
-                                  icon: Icon(Icons.search))
+                                  icon: Icon(
+                                    Icons.question_mark,
+                                  ))
                             ]),
                             //fit: BoxFit.fitWidth),
                             InkWell(
@@ -215,9 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
       future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
-          setState(() {
-            insertMenuAll();
-          });
+          insertMenuAll();
           return Container(child: Text(snapshot.data.toString()));
         } else {
           Menu menu1 = snapshot.data![0];

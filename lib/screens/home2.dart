@@ -215,9 +215,7 @@ class _MyHomePageState extends State<MyHomePage2> {
       future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
-          setState(() {
-            insertMenuAll();
-          });
+          insertMenuAll();
           return Container(child: Text(snapshot.data.toString()));
         } else {
           Menu menu1 = snapshot.data![0];

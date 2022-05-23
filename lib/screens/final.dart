@@ -61,11 +61,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
                   height: 60,
                   child: RaisedButton(
                       onPressed: () {
-                        setState(() {
-                          deleteMyOrderAll();
-                        });
-                        int count = 0;
-                        Navigator.of(context).popUntil((_) => count++ >= 3);
+                        showAlertDialog();
                       },
                       color: Colors.red,
                       child: Text(
@@ -213,6 +209,41 @@ class _MyFinalPageState extends State<MyFinalPage> {
     );
   }
 
+  void showAlertDialog() async {
+    await showDialog(
+      context: _context,
+      //barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            '전체취소 경고',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          //content: Text(id),
+          content: Text("정말 모든 메뉴를\n전체취소하시겠습니까?"),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  setState(() {
+                    deleteMyOrderAll();
+                  });
+                  int count = 0;
+                  Navigator.of(context).popUntil((_) => count++ >= 4);
+                },
+                child:
+                    Text('확인', style: TextStyle(fontWeight: FontWeight.bold))),
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child:
+                    Text('취소', style: TextStyle(fontWeight: FontWeight.bold))),
+          ],
+        );
+      },
+    );
+  }
+
   Widget myOrderBuilder(BuildContext parentContext) {
     return FutureBuilder<List<MyOrder>>(
       builder: (context, snap) {
@@ -229,123 +260,125 @@ class _MyFinalPageState extends State<MyFinalPage> {
             ),
           );
         }
-        return ListView.builder(
-          physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.all(20),
-          itemCount: snap.data?.length,
-          itemBuilder: (context, index) {
-            MyOrder myorder = snap.data![index];
-            return Column(children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      myorder.name,
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
+        return CupertinoScrollbar(
+          child: ListView.builder(
+            physics: BouncingScrollPhysics(),
+            padding: EdgeInsets.all(20),
+            itemCount: snap.data?.length,
+            itemBuilder: (context, index) {
+              MyOrder myorder = snap.data![index];
+              return Column(children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        myorder.name,
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "가격: " + myorder.price.toString(),
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black54,
+                      Text(
+                        "가격: " + myorder.price.toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black54,
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '수량 :  ',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.grey),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 0)),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (myorder.count < 9) {
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '수량 :  ',
+                                style:
+                                    TextStyle(fontSize: 20, color: Colors.grey),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 0)),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (myorder.count < 9) {
+                                      setState(() {
+                                        updateDB(myorder.name, myorder.price,
+                                            myorder.count + 1, myorder.id);
+                                      });
+                                    }
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.add_circle,
+                                  color: Colors.blue,
+                                  size: 30,
+                                ),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 5)),
+                              Text(
+                                myorder.count.toString(),
+                                style:
+                                    TextStyle(fontSize: 23, color: Colors.grey),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 5)),
+                              InkWell(
+                                onTap: () {
+                                  if (myorder.count > 1) {
                                     setState(() {
                                       updateDB(myorder.name, myorder.price,
-                                          myorder.count + 1, myorder.id);
+                                          myorder.count - 1, myorder.id);
                                     });
                                   }
-                                });
-                              },
-                              child: Icon(
-                                Icons.add_circle,
-                                color: Colors.blue,
-                                size: 30,
+                                },
+                                child: Icon(
+                                  Icons.remove_circle,
+                                  color: Colors.blue,
+                                  size: 30,
+                                ),
                               ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 5)),
-                            Text(
-                              myorder.count.toString(),
-                              style:
-                                  TextStyle(fontSize: 23, color: Colors.grey),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 5)),
-                            InkWell(
-                              onTap: () {
-                                if (myorder.count > 1) {
+                              Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 50)),
+                              InkWell(
+                                onTap: () {
                                   setState(() {
-                                    updateDB(myorder.name, myorder.price,
-                                        myorder.count - 1, myorder.id);
+                                    deleteMyOrder(myorder.name);
                                   });
-                                }
-                              },
-                              child: Icon(
-                                Icons.remove_circle,
-                                color: Colors.blue,
-                                size: 30,
+                                },
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
                               ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 50)),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  deleteMyOrder(myorder.name);
-                                });
-                              },
-                              child: Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(240, 240, 240, 1),
-                  border: Border.all(
-                    color: Colors.blue,
-                    width: 1,
+                            ],
+                          )
+                        ],
+                      )
+                    ],
                   ),
-                  //boxShadow: [BoxShadow(color: Colors.lightBlue, blurRadius: 3)],
-                  borderRadius: BorderRadius.circular(12),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(240, 240, 240, 1),
+                    border: Border.all(
+                      color: Colors.blue,
+                      width: 1,
+                    ),
+                    //boxShadow: [BoxShadow(color: Colors.lightBlue, blurRadius: 3)],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              ),
-              Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0)),
-            ]);
-          },
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0)),
+              ]);
+            },
+          ),
         );
       },
       future: loadMyOrder(),
