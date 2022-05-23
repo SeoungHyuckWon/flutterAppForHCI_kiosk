@@ -192,6 +192,14 @@ class DBHelperMenu {
     );
   }
 
+  Future<void> updateMyOrderRank(String id) async {
+    final db = await database;
+
+    // 주어진 Memo를 수정합니다.
+    await db.rawQuery(
+        "UPDATE menus SET rankScore = rankScore + 1 WHERE id = '$id'");
+  }
+
   Future<void> deleteMyOrder(String name) async {
     final db = await database;
 

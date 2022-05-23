@@ -215,26 +215,69 @@ class _MyHomePageState extends State<MyHomePage> {
       future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
-          insertMenuAll();
+          setState(() {
+            insertMenuAll();
+          });
           return Container(child: Text(snapshot.data.toString()));
         } else {
           Menu menu1 = snapshot.data![0];
           Menu menu2 = snapshot.data![1];
           Menu menu3 = snapshot.data![2];
           if (menu1.id == id || menu2.id == id || menu3.id == id) {
-            return Row(
-              children: [
-                Visibility(
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.red,
+            if (menu1.id == id) {
+              return Row(
+                children: [
+                  Text(
+                    'BEST 1위',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
                   ),
-                  visible: true,
-                ),
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 50))
-              ],
-            );
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 33))
+                ],
+              );
+            } else if (menu2.id == id) {
+              return Row(
+                children: [
+                  Text(
+                    'BEST 2위',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 33))
+                ],
+              );
+            } else {
+              return Row(
+                children: [
+                  Text(
+                    'BEST 3위',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 0, horizontal: 33))
+                ],
+              );
+            }
+            ;
+            // return Row(
+            //   children: [
+            //     Visibility(
+            //       child: Icon(
+            //         Icons.star,
+            //         color: Colors.red,
+            //       ),
+            //       visible: true,
+            //     ),
+            //     Padding(
+            //         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 50))
+            //   ],
+            // );
           } else {
             return Row(
               children: [
