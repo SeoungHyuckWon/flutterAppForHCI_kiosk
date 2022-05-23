@@ -11,10 +11,10 @@ class MyHomePage2 extends StatefulWidget {
   const MyHomePage2({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage2> createState() => _MyHomePageState2();
+  State<MyHomePage2> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState2 extends State<MyHomePage2> {
+class _MyHomePageState extends State<MyHomePage2> {
   @override
   List<String> coffeeImg = [
     "assets/coffee_img/01.png",
@@ -57,7 +57,7 @@ class _MyHomePageState2 extends State<MyHomePage2> {
             minWidth: 180.0,
             minHeight: 60.0,
             fontSize: 30.0,
-            activeBgColor: [Colors.lightBlue],
+            activeBgColor: [Colors.lightBlue.shade200],
             activeFgColor: Colors.white,
             inactiveBgColor: Colors.grey,
             inactiveFgColor: Colors.grey[900],
@@ -65,9 +65,12 @@ class _MyHomePageState2 extends State<MyHomePage2> {
             initialLabelIndex: toggleState,
             labels: ['주스', '커피'],
             onToggle: (index) {
+              //insertMenuAll();
               setState(() {
                 toggleState = index!;
               });
+              //saveDB();
+              //deleteMenu('C3');
             },
           ),
         ]),
@@ -81,7 +84,7 @@ class _MyHomePageState2 extends State<MyHomePage2> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     childAspectRatio: 7 / 10,
-                    //mainAxisExtent: 200,
+                    //mainAxisExtent: 350,
                     crossAxisSpacing: 10,
                   ),
                   itemBuilder: (BuildContext context, int index) {
@@ -125,6 +128,27 @@ class _MyHomePageState2 extends State<MyHomePage2> {
     );
   }
 
+  Future<void> saveDB() async {
+    DBHelperMenu sd = DBHelperMenu();
+
+    var fido = Menu(
+        id: 'J12',
+        name: '블루베리주스',
+        price: 5000,
+        mainAllergy: '블루베리',
+        subAllergy: '꿀, 우유',
+        rankScore: 0);
+
+    await sd.insertMenu(fido);
+
+    print(await sd.menus());
+  }
+
+  Future<void> deleteMenu(String id) async {
+    DBHelperMenu sd = DBHelperMenu();
+    sd.deleteMenu(id);
+  }
+
   Future<List<Menu>> loadMenu(String id) async {
     DBHelperMenu sd = DBHelperMenu();
     return await sd.findMenu(id);
@@ -137,7 +161,6 @@ class _MyHomePageState2 extends State<MyHomePage2> {
         if (snapshot.data == null || snapshot.data == []) {
           return Container(child: Text("데이터를 불러올 수 없습니다."));
         } else {
-          print(snapshot.data);
           Menu menu = snapshot.data![0];
           return SingleChildScrollView(
             child: ListBody(children: [
@@ -182,35 +205,81 @@ class _MyHomePageState2 extends State<MyHomePage2> {
     return await sd.findMemoRank(toggleState);
   }
 
+  Future<void> insertMenuAll() async {
+    DBHelperMenu sd = DBHelperMenu();
+    await sd.insertMenuAll();
+  }
+
   Widget loadBuilderRank(String id, int toggleState) {
     return FutureBuilder<List<Menu>>(
       future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
+          setState(() {
+            insertMenuAll();
+          });
           return Container(child: Text(snapshot.data.toString()));
         } else {
           Menu menu1 = snapshot.data![0];
           Menu menu2 = snapshot.data![1];
           Menu menu3 = snapshot.data![2];
           if (menu1.id == id || menu2.id == id || menu3.id == id) {
-            return Row(
-              children: [
-                Visibility(
-                  child: Icon(
-                    Icons.star,
-                    color: Colors.red,
+            if (menu1.id == id) {
+              return Row(
+                children: [
+                  Text(
+                    'BEST 1위',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
                   ),
-                  visible: true,
-                ),
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 18))
-              ],
-            );
+                  Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 1))
+                ],
+              );
+            } else if (menu2.id == id) {
+              return Row(
+                children: [
+                  Text(
+                    'BEST 2위',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 1))
+                ],
+              );
+            } else {
+              return Row(
+                children: [
+                  Text(
+                    'BEST 3위',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 1))
+                ],
+              );
+            }
+            ;
+            // return Row(
+            //   children: [
+            //     Visibility(
+            //       child: Icon(
+            //         Icons.star,
+            //         color: Colors.red,
+            //       ),
+            //       visible: true,
+            //     ),
+            //     Padding(
+            //         padding: EdgeInsets.symmetric(vertical: 0, horizontal: 50))
+            //   ],
+            // );
           } else {
             return Row(
               children: [
                 Padding(
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 28))
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 30))
               ],
             );
           }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_kiosk/database/db.dart';
 import 'package:flutter_application_kiosk/database/myOrder.dart';
 import 'package:flutter_application_kiosk/database/total.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MyFinalPage extends StatefulWidget {
   const MyFinalPage({Key? key, required String id}) : super(key: key);
@@ -49,20 +50,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(27.5))),
                     ),
-                    SizedBox(
-                      width: 130,
-                      height: 150,
-                      child: RaisedButton(
-                          onPressed: () {},
-                          color: Colors.lightBlue[200],
-                          child: Text(
-                            "결제하기",
-                            style: TextStyle(
-                                fontSize: 50, fontWeight: FontWeight.bold),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(27.5))),
-                    ),
+                    loadBuilderRank(),
                   ],
                 ),
                 Padding(
@@ -134,6 +122,11 @@ class _MyFinalPageState extends State<MyFinalPage> {
     sd.updateMyOrder(fido);
   }
 
+  Future<void> updateMyOrderRank(String id) async {
+    DBHelperMenu sd = DBHelperMenu();
+    sd.updateMyOrderRank(id);
+  }
+
   Future<List<Total>> gettotal() async {
     DBHelperMenu sd = DBHelperMenu();
     return await sd.getTotal();
@@ -171,6 +164,52 @@ class _MyFinalPageState extends State<MyFinalPage> {
         }
       },
       future: gettotal(),
+    );
+  }
+
+  Widget loadBuilderRank() {
+    return FutureBuilder<List<MyOrder>>(
+      future: loadMyOrder(),
+      builder: (BuildContext context, AsyncSnapshot<List<MyOrder>> snapshot) {
+        if (snapshot.data == null || snapshot.data == []) {
+          return Container(child: Text("데이터를 불러올 수 없습니다."));
+        } else {
+          List idList = [];
+          for (int i = 0; i < snapshot.data!.length; i++) {
+            MyOrder myorder = snapshot.data![i];
+            idList.add(myorder.id);
+          }
+          return SizedBox(
+            width: 130,
+            height: 150,
+            child: RaisedButton(
+                onPressed: () {
+                  for (int i = 0; i < idList.length; i++) {
+                    updateMyOrderRank(idList[i]);
+                  }
+                  setState(() {
+                    deleteMyOrderAll();
+                  });
+                  int count = 0;
+                  Navigator.of(context).popUntil((_) => count++ >= 3);
+                  Fluttertoast.showToast(
+                      msg: '\n결제가\n완료되었습니다.\n',
+                      backgroundColor: Colors.lightBlue[50],
+                      gravity: ToastGravity.CENTER,
+                      textColor: Colors.black,
+                      fontSize: 40);
+                },
+                color: Colors.lightBlue[200],
+                child: Text(
+                  "결제하기",
+                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(27.5))),
+          );
+        }
+      },
+      //future: loadMenu(id),
     );
   }
 
