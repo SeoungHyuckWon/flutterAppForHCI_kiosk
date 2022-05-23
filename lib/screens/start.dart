@@ -5,8 +5,6 @@ import 'package:flutter_application_kiosk/screens/home2.dart';
 import 'home.dart';
 //import 'package:sk_alert_dialog/sk_alert_dialog.dart';
 
-enum fontsize { BIG, SMALL }
-
 class MyStartPage extends StatefulWidget {
   const MyStartPage({Key? key, required String title}) : super(key: key);
 
@@ -15,11 +13,10 @@ class MyStartPage extends StatefulWidget {
 }
 
 class _MyStartPageState extends State<MyStartPage> {
-  fontsize _fontsize = fontsize.BIG;
   @override
   bool textBool = true;
-  String text = '작은글씨';
   double textSize = 60;
+  int fontVal = 0;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +33,7 @@ class _MyStartPageState extends State<MyStartPage> {
                             EdgeInsets.symmetric(vertical: 0, horizontal: 170)),
                     IconButton(
                       onPressed: () {
-                        changeFontSize();
+                        showStatefulDialog();
                       },
                       icon: Icon(Icons.settings),
                       iconSize: 50,
@@ -89,70 +86,61 @@ class _MyStartPageState extends State<MyStartPage> {
             )));
   }
 
-  // void showAlertDialog() async {
-  //   await showDialog(
-  //     context: context,
-  //     //barrierDismissible: false, // user must tap button!
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         content: Column(
-  //           children: <Widget>[
-  //             ListTile(
-  //               title: Text('큰 글씨'),
-  //               leading: Radio(
-  //                 value: fontsize.BIG,
-  //                 groupValue: _fontsize,
-  //                 onChanged: (fontsize? value) {
-  //                   setState(() {
-  //                     textBool = false;
-  //                     textSize = 60;
-  //                     _fontsize = value!;
-  //                   });
-  //                 },
-  //               ),
-  //             ),
-  //             ListTile(
-  //               title: Text('작은 글씨'),
-  //               leading: Radio(
-  //                 value: fontsize.SMALL,
-  //                 groupValue: _fontsize,
-  //                 onChanged: (fontsize? value) {
-  //                   setState(() {
-  //                     textBool = false;
-  //                     textSize = 40;
-  //                     _fontsize = value!;
-  //                   });
-  //                 },
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         actions: [
-  //           Row(
-  //             children: [
-  //               FlatButton(
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: Text('닫기')),
-  //             ],
-  //           )
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  Future<dynamic> showStatefulDialog() async {
+    await showDialog<void>(
+      context: context,
+      builder: (_) {
+        int? selectedRadio = fontVal;
+        return AlertDialog(
+          title: Text(
+            '글씨 크기 변경',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          content: StatefulBuilder(
+            builder: (__, StateSetter setDialogState) {
+              // 변수명 변경
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List<Widget>.generate(2, (int index) {
+                  return ListTile(
+                    title: makeTitle(index),
+                    leading: Radio<int>(
+                      value: index,
+                      groupValue: selectedRadio,
+                      onChanged: (int? value) {
+                        setDialogState(() => selectedRadio = value);
+                        setState(() => fontVal = value!);
+                      },
+                    ),
+                  );
+                }),
+              );
+            },
+          ),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  changeFontSize(fontVal);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  '닫기',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )),
+          ],
+        );
+      },
+    );
+  }
 
-  void changeFontSize() async {
+  void changeFontSize(int value) async {
     setState(() {
-      if (textBool == true) {
+      if (value == 1) {
         textBool = false;
         textSize = 40;
-        text = '큰글씨';
       } else {
         textBool = true;
         textSize = 60;
-        text = '작은글씨';
       }
     });
   }
@@ -164,6 +152,14 @@ class _MyStartPageState extends State<MyStartPage> {
     } else {
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => MyHomePage2()));
+    }
+  }
+
+  Text makeTitle(int index) {
+    if (index == 0) {
+      return Text('큰 글씨');
+    } else {
+      return Text('작은 글씨');
     }
   }
 }
