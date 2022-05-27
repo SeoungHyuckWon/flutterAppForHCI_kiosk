@@ -20,6 +20,7 @@ class _MyStartPageState extends State<MyStartPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Container(
             alignment: Alignment.center,
             child: Column(

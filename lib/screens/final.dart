@@ -18,6 +18,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Container(
             alignment: Alignment.center,
             child: Column(

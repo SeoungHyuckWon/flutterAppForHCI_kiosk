@@ -21,6 +21,7 @@ class _MyDetailPage2State extends State<MyDetailPage2> {
   String newIce = '얼음O';
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text(
           '1. 사이즈를 선택하세요.',

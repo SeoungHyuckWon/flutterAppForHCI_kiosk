@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage2> {
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(children: [
         Padding(padding: EdgeInsets.all(15)),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -83,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage2> {
                   physics: BouncingScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    childAspectRatio: 7 / 10,
+                    childAspectRatio: 7.2 / 10,
                     //mainAxisExtent: 350,
                     crossAxisSpacing: 10,
                   ),
