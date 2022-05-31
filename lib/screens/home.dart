@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(children: [
         Padding(padding: EdgeInsets.all(15)),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -83,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   physics: BouncingScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 7.5 / 10,
+                    childAspectRatio: 8 / 10,
                     //mainAxisExtent: 350,
                     crossAxisSpacing: 10,
                   ),
@@ -107,7 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     showAlertDialog(
                                         id + (index + 1).toString());
                                   },
-                                  icon: Icon(Icons.search))
+                                  icon: Icon(
+                                    Icons.question_mark_rounded,
+                                  ))
                             ]),
                             //fit: BoxFit.fitWidth),
                             InkWell(
@@ -215,9 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
       future: loadMenuRank(toggleState),
       builder: (BuildContext context, AsyncSnapshot<List<Menu>> snapshot) {
         if (snapshot.data == null || snapshot.data == []) {
-          setState(() {
-            insertMenuAll();
-          });
+          insertMenuAll();
           return Container(child: Text(snapshot.data.toString()));
         } else {
           Menu menu1 = snapshot.data![0];
