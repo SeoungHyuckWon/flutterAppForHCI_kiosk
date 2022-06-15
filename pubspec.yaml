@@ -36,6 +36,7 @@ dependencies:
   sqflite: ^2.0.2+1
   path_provider: ^2.0.10
   fluttertoast: ^8.0.9
+  intl: ^0.17.0
   # sk_alert_dialog: ^1.0.0
 
 dev_dependencies:

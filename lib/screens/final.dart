@@ -4,6 +4,7 @@ import 'package:flutter_application_kiosk/database/db.dart';
 import 'package:flutter_application_kiosk/database/myOrder.dart';
 import 'package:flutter_application_kiosk/database/total.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class MyFinalPage extends StatefulWidget {
   const MyFinalPage({Key? key, required String id}) : super(key: key);
@@ -15,6 +16,7 @@ class MyFinalPage extends StatefulWidget {
 class _MyFinalPageState extends State<MyFinalPage> {
   @override
   late BuildContext _context;
+  var f = NumberFormat('###,###,###,###');
   Widget build(BuildContext context) {
     _context = context;
     return Scaffold(
@@ -150,7 +152,7 @@ class _MyFinalPageState extends State<MyFinalPage> {
             alignment: Alignment.center,
             //Total total = snap.data![0];
             child: Text(
-              '총 : ' + total.sum.toString() + '원',
+              '총 : ' + f.format(total.sum) + '원',
               style: TextStyle(
                   fontSize: 40,
                   color: Colors.black,
@@ -278,16 +280,16 @@ class _MyFinalPageState extends State<MyFinalPage> {
                         myorder.name,
                         style: TextStyle(
                           fontSize: 25,
-                          color: Colors.black54,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         "가격: " + myorder.price.toString(),
                         style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black54,
-                        ),
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
                       ),
                       Column(
                         children: [
@@ -295,8 +297,10 @@ class _MyFinalPageState extends State<MyFinalPage> {
                             children: [
                               Text(
                                 '수량 :  ',
-                                style:
-                                    TextStyle(fontSize: 20, color: Colors.grey),
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
                               ),
                               Padding(
                                   padding: EdgeInsets.symmetric(
@@ -323,8 +327,10 @@ class _MyFinalPageState extends State<MyFinalPage> {
                                       vertical: 0, horizontal: 5)),
                               Text(
                                 myorder.count.toString(),
-                                style:
-                                    TextStyle(fontSize: 23, color: Colors.grey),
+                                style: TextStyle(
+                                    fontSize: 23,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
                               ),
                               Padding(
                                   padding: EdgeInsets.symmetric(

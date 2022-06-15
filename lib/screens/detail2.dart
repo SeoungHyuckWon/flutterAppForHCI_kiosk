@@ -17,7 +17,7 @@ class MyDetailPage2 extends StatefulWidget {
 class _MyDetailPage2State extends State<MyDetailPage2> {
   @override
   String newSize = 'S/';
-  String newSyrup = '시럽/';
+  String newSyrup = '시럽O/';
   String newIce = '얼음O';
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +38,7 @@ class _MyDetailPage2State extends State<MyDetailPage2> {
           inactiveFgColor: Colors.grey[900],
           totalSwitches: 2,
           initialLabelIndex: 0,
-          labels: ['+0원\n작은컵', '+800원\n큰 컵'],
+          labels: ['+0원\n작은컵(S)', '+800원\n큰 컵(L)'],
           onToggle: (index) {
             if (index == 0) {
               newSize = 'S/';
